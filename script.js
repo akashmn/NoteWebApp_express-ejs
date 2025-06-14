@@ -1,6 +1,10 @@
 import express from 'express'
 const app = express()
 
+app.use(express.json()) // Middleware to parse JSON bodies
+app.use(express.urlencoded({ extended: true })) // Middleware to parse URL-encoded bodies
+
+
 // Middleware to log requests
 app.use((req, res, next) => {
     console.log(`${req.method} request for '${req.url}'`)
