@@ -26,16 +26,30 @@ app.post('/create', (req, res) => {
 });
 
 app.get('/file/:filename', (req, res) => {
-    console.log(req.params.filename);
     fs.readFile(`./files/${req.params.filename}`, 'utf8', (err, data) => {
         if (err) {
             console.error(err);
             return res.status(404).send('File not found');
         }
-        console.log(data);
         res.render('show', { title: req.params.filename, description: data });
     });
 });
+
+app.get('/edit/:filename', (req, res) => {
+    res.render('edit', { title: req.params.filename });
+});
+
+app.post('/edit', (req, res) => {
+    fs.rename(`./files/${req.body.previous}`, `./files/${req.body.new}`, (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error renaming file');
+        }
+        res.redirect('/');
+        });
+});
+
+
 
 
 app.listen(3000, () => {
