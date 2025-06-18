@@ -36,16 +36,39 @@ app.get('/file/:filename', (req, res) => {
 });
 
 app.get('/edit/:filename', (req, res) => {
-    res.render('edit', { title: req.params.filename });
+    fs.readFile(`./files/${req.params.filename}`, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return res.status(404).send('File not found');
+        }
+        res.render('edit', { title: req.params.filename, description: data });
+    });
 });
 
 app.post('/edit', (req, res) => {
-    fs.rename(`./files/${req.body.previous}`, `./files/${req.body.new}`, (err) => {
+    const oldFilename = req.body.previous;
+    const newFilename = req.body.new || oldFilename; // Use old filename if new one is empty
+    const newContent = req.body.description;
+
+    // First, update the content
+    fs.writeFile(`./files/${oldFilename}`, newContent, (err) => {
         if (err) {
             console.error(err);
-            return res.status(500).send('Error renaming file');
+            return res.status(500).send('Error updating file content');
         }
-        res.redirect('/');
+
+        // If filename changed, rename the file
+        if (oldFilename !== newFilename) {
+            fs.rename(`./files/${oldFilename}`, `./files/${newFilename}`, (err) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Error renaming file');
+                }
+                res.redirect('/');
+            });
+        } else {
+            res.redirect('/');
+        }
     });
 });
 
