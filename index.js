@@ -15,6 +15,17 @@ app.get('/', (req, res) => {
     })
 });
 
+app.post('/create', (req, res) => {
+    fs.writeFile(`./files/${req.body.title.split(' ').join('_')}.txt`, req.body.description, function(err) {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error creating file');
+        }
+        res.redirect('/');
+    });
+});
+
+
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
