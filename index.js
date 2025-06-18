@@ -46,11 +46,19 @@ app.post('/edit', (req, res) => {
             return res.status(500).send('Error renaming file');
         }
         res.redirect('/');
-        });
+    });
 });
 
-
-
+// Add delete route
+app.post('/delete/:filename', (req, res) => {
+    fs.unlink(`./files/${req.params.filename}`, (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error deleting file');
+        }
+        res.redirect('/');
+    });
+});
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');

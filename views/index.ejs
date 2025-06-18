@@ -14,15 +14,15 @@
                 <p class="text-zinc-400">Add a new task to your list</p>
             </div>
             
-            <form 
+            <form
                 action="/create"
                 method="POST"
                 class="space-y-6 bg-zinc-800 p-8 rounded-2xl shadow-2xl border border-zinc-700">
                 <div class="space-y-2">
                     <label class="text-sm font-medium text-zinc-300 block">Task Title</label>
-                    <input 
+                    <input
                         name="title"
-                        type="text" 
+                        type="text"
                         placeholder="Enter task title..."
                         class="w-full px-4 py-3 bg-zinc-700 border border-zinc-600 rounded-lg text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-zinc-650"
                     >
@@ -30,7 +30,7 @@
                 
                 <div class="space-y-2">
                     <label class="text-sm font-medium text-zinc-300 block">Description</label>
-                    <textarea 
+                    <textarea
                         name="description"
                         placeholder="Enter task description..."
                         rows="4"
@@ -38,7 +38,7 @@
                     ></textarea>
                 </div>
                 
-                <button 
+                <button
                     type="submit"
                     class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-zinc-800 shadow-lg"
                 >
@@ -53,19 +53,28 @@
                 <p class="text-zinc-400">Manage your current tasks</p>
             </div>
             
-        <div class="space-y-4">
+            <div class="space-y-4">
             <% if (files.length > 0) { %>
                 <% files.forEach(function(val) { %>
                     <div class="task bg-zinc-800 p-6 rounded-2xl shadow-2xl border border-zinc-700 hover:border-zinc-600 transition-all duration-200 hover:shadow-xl group">
                         <h3 class="text-lg font-semibold text-white mb-3 group-hover:text-blue-300 transition-colors duration-200">
                             <%= val %>
                         </h3>
-                        <a href="/file/<%= val%>" class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200 hover:underline">
-                            read more...
-                        </a>
-                        <a href="/edit/<%= val%>" class="opacity-75 text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors duration-200 hover:underline ml-4">
-                             edit this task
-                        </a>
+                        <div class="flex items-center justify-between">
+                            <div class="flex gap-4">
+                                <a href="/file/<%= val%>" class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200 hover:underline">
+                                    read more...
+                                </a>
+                                <a href="/edit/<%= val%>" class="text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors duration-200 hover:underline">
+                                    edit this task
+                                </a>
+                            </div>
+                            <form action="/delete/<%= val %>" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this task?')">
+                                <button type="submit" class="text-red-400 hover:text-red-300 text-sm font-medium transition-colors duration-200 hover:underline focus:outline-none">
+                                    delete
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 <% }) %>
             <% } else { %>
